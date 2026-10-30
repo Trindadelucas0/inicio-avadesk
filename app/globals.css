@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/* ===== Paleta Avadesk (tailwind.config de avadesk.com.br) ===== */
+:root {
+  --accent: #ff2a2a;
+  --accent-2: #c40018;
+  --glow: rgba(255, 42, 42, 0.4);
+  --font: var(--font-poppins), system-ui, sans-serif;
+  --mono: var(--font-mono), ui-monospace, monospace;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="dark"] {
+  --bg: #070709; --bg-2: #101014;
+  --card: rgba(16, 16, 20, 0.72);
+  --text: #f2f2f4; --text-2: rgba(242, 242, 244, 0.78); --muted: #a1a1aa;
+  --subtle: rgba(255, 42, 42, 0.08); --border: rgba(255, 42, 42, 0.28);
+  --btn: linear-gradient(135deg, rgba(255,42,42,.08), rgba(196,0,24,.04));
+  --acc-text: #ff4d4d; --grid: rgba(255, 42, 42, 0.06); --shadow: rgba(0,0,0,.55);
+}
+[data-theme="light"] {
+  --bg: #f2f2f4; --bg-2: #e6e6ea;
+  --card: rgba(255, 255, 255, 0.78);
+  --text: #101014; --text-2: rgba(16, 16, 20, 0.75); --muted: #52525b;
+  --subtle: rgba(196, 0, 24, 0.06); --border: rgba(196, 0, 24, 0.22);
+  --btn: linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,42,42,.04));
+  --acc-text: #c40018; --grid: rgba(196, 0, 24, 0.06); --shadow: rgba(16,16,20,.12);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--font); background: var(--bg); color: var(--text);
+  min-height: 100dvh; overflow-x: hidden;
+  transition: background-color .6s var(--ease), color .6s var(--ease);
+}
+/* transição suave de tema para todos os elementos com variáveis */
+.card, .link-btn, .social, .pill, .theme-btn, .avatar-inner {
+  transition: background .6s var(--ease), border-color .4s var(--ease), color .4s var(--ease), box-shadow .4s var(--ease);
+}
+
+/* View Transition: revelação circular ao trocar o tema */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
+/* ===== Fundo tecnológico ===== */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 75%);
+  animation: grid-move 24s linear infinite;
+}
+@keyframes grid-move { to { background-position: 40px 40px; } }
+.bg-orb { position: fixed; border-radius: 50%; filter: blur(70px); pointer-events: none; z-index: 0; }
+.scanline {
+  position: fixed; left: 0; right: 0; height: 120px; z-index: 0; pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(255,42,42,.06), transparent);
+  animation: scan 7s linear infinite;
+}
+@keyframes scan { from { top: -120px; } to { top: 100%; } }
+
+/* ===== Card (estrutura das páginas Avadesk de referência) ===== */
+.card {
+  position: relative; width: 100%;
+  background: var(--card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border); border-radius: 20px;
+  padding: 40px 24px 26px; overflow: hidden;
+  box-shadow: 0 10px 40px var(--shadow), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.card::before { /* linha de luz no topo, como na referência */
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-2), var(--accent), var(--accent-2), transparent);
+  background-size: 200% 100%; animation: beam 4s linear infinite;
+}
+@keyframes beam { to { background-position: -200% 0; } }
+.corner { position: absolute; width: 14px; height: 14px; border-color: var(--accent); opacity: .7; }
+.corner.tl { top: 10px; left: 10px; border-top: 2px solid; border-left: 2px solid; }
+.corner.tr { top: 10px; right: 10px; border-top: 2px solid; border-right: 2px solid; }
+.corner.bl { bottom: 10px; left: 10px; border-bottom: 2px solid; border-left: 2px solid; }
+.corner.br { bottom: 10px; right: 10px; border-bottom: 2px solid; border-right: 2px solid; }
+
+/* ===== Avatar com anel cônico girando ===== */
+.avatar { position: relative; width: 124px; height: 124px; margin: 0 auto 16px; }
+.avatar::before, .avatar::after { content: ""; position: absolute; border-radius: 50%; }
+.avatar::before { inset: -3px; background: conic-gradient(var(--accent-2), var(--accent), #ff8a8a, var(--accent-2), transparent 70%, var(--accent-2)); animation: spin 4s linear infinite; }
+.avatar::after { inset: -8px; background: conic-gradient(var(--accent), transparent, var(--accent-2), transparent, var(--accent)); filter: blur(10px); opacity: .45; animation: spin 4s linear infinite reverse; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.avatar-inner {
+  position: relative; z-index: 1; width: 100%; height: 100%; border-radius: 50%;
+  border: 3px solid var(--bg); background: radial-gradient(circle at 30% 25%, var(--bg-2), var(--bg));
+  display: grid; place-items: center; overflow: hidden;
+  font-weight: 700; font-size: 2.4rem; letter-spacing: 1px; color: var(--acc-text);
+}
+.avatar-inner img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+
+.name { font-size: 1.45rem; font-weight: 600; letter-spacing: .4px; margin: 0 0 4px; }
+.role { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 12px; }
+.role b { color: var(--acc-text); font-weight: 500; }
+.typing::after { content: "▍"; color: var(--accent); animation: blink 1s steps(1) infinite; margin-left: 2px; }
+@keyframes blink { 50% { opacity: 0; } }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 99px;
+  background: var(--subtle); border: 1px solid var(--border); color: var(--text-2); font-size: .85rem; text-decoration: none;
+}
+.pill:hover { border-color: var(--accent); color: var(--text); }
+.pill svg { width: 15px; height: 15px; color: var(--acc-text); }
+
+/* ===== Botões ===== */
+.link-btn {
+  position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 16px 20px; border-radius: 14px;
+  background: var(--btn); border: 1px solid var(--border);
+  color: var(--text); text-decoration: none; font-size: .95rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+  overflow: hidden; isolation: isolate; will-change: transform;
+}
+.link-btn svg { width: 20px; height: 20px; color: var(--acc-text); transition: transform .4s var(--ease), color .3s; flex: none; }
+.link-btn .shine { /* brilho percorrendo */
+  position: absolute; inset: 0; z-index: -1; left: -110%; width: 70%;
+  background: linear-gradient(100deg, transparent, rgba(255,120,120,.22), transparent); transform: skewX(-20deg);
+  transition: left .7s var(--ease);
+}
+.link-btn .spot { /* holofote que segue o cursor */
+  position: absolute; inset: 0; z-index: -2; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(255,42,42,.22), transparent 60%);
+}
+.link-btn .arrow { position: absolute; right: 18px; opacity: 0; transform: translateX(-8px); transition: .35s var(--ease); width: 18px; height: 18px; }
+.link-btn:hover, .link-btn:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 6px 24px rgba(255,42,42,.25), 0 0 46px rgba(255,42,42,.12), inset 0 0 0 1px rgba(255,42,42,.25);
+}
+.link-btn:hover .shine, .link-btn:focus-visible .shine { left: 140%; }
+.link-btn:hover .spot { opacity: 1; }
+.link-btn:hover .arrow, .link-btn:focus-visible .arrow { opacity: 1; transform: none; }
+.link-btn:hover svg:first-of-type { transform: scale(1.15) rotate(-6deg); }
+.link-btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; color: #fff; }
+.link-btn.primary svg { color: #fff; }
+.link-btn.primary:hover { box-shadow: 0 8px 30px rgba(255,42,42,.5), 0 0 60px rgba(255,42,42,.25); }
+
+/* ===== Ícones sociais redondos ===== */
+.social {
+  width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--subtle); border: 1px solid var(--border); color: var(--text-2);
+}
+.social svg { width: 20px; height: 20px; }
+.social:hover, .social:focus-visible { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 6px 22px rgba(255,42,42,.45); }
+
+.footer { border-top: 1px solid var(--border); padding-top: 16px; text-align: center; font-size: .75rem; color: var(--muted); font-family: var(--mono); }
+.footer a { color: var(--acc-text); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ===== Botão de tema ===== */
+.theme-btn {
+  position: fixed; top: 16px; right: 16px; z-index: 20; width: 46px; height: 46px; border-radius: 14px;
+  background: var(--card); backdrop-filter: blur(14px); border: 1px solid var(--border); color: var(--text);
+  display: grid; place-items: center; cursor: pointer;
+}
+.theme-btn:hover { border-color: var(--accent); box-shadow: 0 0 24px var(--glow); }
+.theme-btn svg { width: 21px; height: 21px; }
+
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
