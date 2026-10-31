@@ -1,0 +1,4 @@
+{"name":"links-nicoly-gandara","version":"1.0.0","private":true,
+"scripts":{"dev":"next dev","build":"next build","start":"npx serve out"},
+"dependencies":{"next":"15.5.4","react":"19.1.1","react-dom":"19.1.1","framer-motion":"^12.23.0"},
+"devDependencies":{"typescript":"^5","@types/react":"^19","@types/node":"^22","tailwindcss":"^4","@tailwindcss/postcss":"^4"}}
